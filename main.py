@@ -45,7 +45,6 @@ def start(message):
     )
     DAO.create_participant(participant)
 
-# Запуск рассылки всем
 @bot.message_handler(commands=['message_to_all'])
 def message_to_all_init(message):
     user_auth = DAO.define_authorization(message.from_user.id)
@@ -65,7 +64,6 @@ def send_to_all(message):
                 print(f"Ошибка отправки {result.chat_id_participant}: {e}")
                 time.sleep(1)
 
-# Запуск рассылки рефери
 @bot.message_handler(commands=['message_to_ref'])
 def message_to_ref_init(message):
     user_auth = DAO.define_authorization(message.from_user.id)
@@ -84,7 +82,6 @@ def send_to_ref(message):
                 print(f"Ошибка отправки {result.chat_id_participant}: {e}")
                 time.sleep(1)
 
-# Обработка фото
 @bot.message_handler(content_types=['photo'])
 def photo_handler(message):
     caption = message.caption if message.caption else ""
@@ -105,7 +102,6 @@ def photo_handler(message):
                     print(f"Ошибка отправки фото {result.chat_id_participant}: {e}")
                     time.sleep(1)
 
-# Отписка
 @bot.message_handler(commands=['unsubscribe'])
 def unsubscribe(message):
     DAO.delete_participant(message.from_user.id)
