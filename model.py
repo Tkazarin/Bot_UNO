@@ -8,5 +8,5 @@ class Participants(Base):
 
     id_participant = Column(Integer, primary_key=True)
     authorization = Column(String(3), nullable=False)
-    chat_id_participant = Column(Integer, nullable=False)
-    tg_id_participant = Column(Integer, nullable=False)
+    chat_id_participant = Column(String(255), nullable=False)
+    tg_id_participant = Column(String(255), nullable=False)

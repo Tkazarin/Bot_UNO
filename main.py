@@ -1,4 +1,5 @@
-from telebot import TeleBot, types
+from datetime import datetime
+from telebot import TeleBot, types, ExceptionHandler
 import time
 from requests.exceptions import ReadTimeout, ConnectionError
 
@@ -10,10 +11,14 @@ from model import Participants
 TOKEN = get_tg_token()
 bot = TeleBot(token=TOKEN)
 
-def my_exception_handler(exception):
-    print(exception)
-    time.sleep(1)
-bot.exception_handler = my_exception_handler
+
+class MyExceptionHandler(ExceptionHandler):
+    def handle(self, exc_info):
+        now = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+        print(f"[{now}] Произошло исключение: {exc_info}")
+        time.sleep(1)
+        return True  #
+
 
 
 @bot.message_handler(commands=['start'])
@@ -107,9 +112,5 @@ def unsubscribe(message):
     DAO.delete_participant(message.from_user.id)
     bot.send_message(message.chat.id, 'Еще увидимся!')
 
-while True:
-    try:
-        bot.polling(none_stop=True, interval=0, timeout=100)
-    except Exception as e:
-        my_exception_handler(e)
-        time.sleep(5)
+if __name__ == "__main__":
+    bot.infinity_polling(skip_pending=True)
